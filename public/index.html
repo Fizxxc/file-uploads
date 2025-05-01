@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>File Uploader</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #f5f7fa, #c3cfe2);
+      padding: 40px;
+      max-width: 700px;
+      margin: auto;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #333;
+      margin-top: 30px;
+    }
+
+    form {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 30px;
+    }
+
+    input[type="file"] {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-right: 10px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .file-list {
+      background-color: #ffffff;
+      padding: 15px 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .file-list a {
+      display: block;
+      margin: 8px 0;
+      color: #007bff;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .file-list a:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h2>📤 Upload File</h2>
+  <form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" required>
+    <button type="submit">Upload</button>
+  </form>
+
+  <h2>📁 File Tersimpan:</h2>
+  <div class="file-list" id="fileList">Memuat daftar file...</div>
+
+  <script>
+    fetch('/files')
+      .then(res => res.json())
+      .then(files => {
+        const fileList = document.getElementById('fileList');
+        fileList.innerHTML = '';
+        if (files.length === 0) {
+          fileList.textContent = 'Belum ada file yang diunggah.';
+          return;
+        }
+        files.forEach(file => {
+          const link = document.createElement('a');
+          link.href = `/uploads/${file}`;
+          link.textContent = file;
+          link.target = "_blank";
+          fileList.appendChild(link);
+        });
+      });
+  </script>
+</body>
+</html>
